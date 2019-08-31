@@ -5,10 +5,10 @@ import "./App.css"
 
 const meals = ["breakfast", "lunch", "dinner"]
 const days = ["mon", "tue", "wed", "thur", "fri"]
-const foods = ["junk", "mid", "healthy"]
+const foods = ["junk", "mid", "healthy"] // public/images/junk.png
 
 const App = () => {
-  const [healthiness, setHealthiness] = useState(0)
+  const [healthiness, setHealthiness] = useState(0) // from -1 to 1
   const [week, setWeek] = useState(1)
   const navStyle = { fontSize: "1.8rem", margin: "0 8px", cursor: "pointer" }
   return (
@@ -48,9 +48,7 @@ const Options = ({ setHealthiness }) => (
     <Slider
       defaultValue={50}
       valueLabelFormat={value => `${(value / 50 - 1).toFixed(1)}`}
-      onChange={(_, value) => {
-        setHealthiness(value / 50 - 1)
-      }}
+      onChange={(_, value) => setHealthiness(value / 50 - 1)}
       valueLabelDisplay="off"
     />
   </div>
@@ -62,16 +60,13 @@ const Grid = ({ healthiness, week }) => (
       <div key={meal} style={{ display: "flex", flexDirection: "column" }}>
         <div style={{ textAlign: "center", fontWeight: "bold" }}>{meal}</div>
         {days.map(day => {
-          const thresholds = foods
+          // set a threshold for each item
+          const threshold = foods
             .map(food => seedrandom(`${week}.${day}.${meal}.${food}`)() * 2 - 1)
             .slice(1)
-            .sort()
-          const food =
-            healthiness < thresholds[0]
-              ? foods[0]
-              : healthiness < thresholds[1]
-              ? foods[1]
-              : foods[2]
+            .map(t => healthiness >= t)
+            .filter(Boolean).length
+          const foodItem = foods[threshold]
           return (
             <div
               key={meal + day}
@@ -79,7 +74,7 @@ const Grid = ({ healthiness, week }) => (
                 margin: 8,
                 height: 128,
                 width: 128,
-                backgroundImage: `url(./images/${food}.png)`,
+                backgroundImage: `url(./images/${foodItem}.png)`,
                 backgroundSize: "contain"
               }}
             ></div>
