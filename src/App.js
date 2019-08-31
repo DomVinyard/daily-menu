@@ -3,13 +3,48 @@ import { Slider } from "@material-ui/core"
 import seedrandom from "seedrandom"
 import "./App.css"
 
-const week = 1
 const meals = ["breakfast", "lunch", "dinner"]
 const days = ["mon", "tue", "wed", "thur", "fri"]
 const foods = ["junk", "mid", "healthy"]
 
-const Options = ({ setHealthiness, healthiness }) => (
-  <div style={{ width: 512 }}>
+const App = () => {
+  const [healthiness, setHealthiness] = useState(0)
+  const [week, setWeek] = useState(1)
+  const navStyle = { fontSize: "1.8rem", margin: "0 8px", cursor: "pointer" }
+  return (
+    <div
+      style={{
+        maxWidth: 608,
+        margin: "2rem auto",
+        textAlign: "center",
+        display: "flex"
+      }}
+    >
+      <div>
+        <h1 style={{ marginBottom: "3rem" }}>
+          <span
+            style={{ opacity: week === 1 ? 0.1 : 1, ...navStyle }}
+            onClick={() => setWeek(Math.max(0, week - 1))}
+            direction={-1}
+            children="⏪"
+          />
+          <span>Week {week}</span>
+          <span
+            style={navStyle}
+            onClick={() => setWeek(week + 1)}
+            direction={1}
+            children={"⏩"}
+          />
+        </h1>
+        <Options setHealthiness={setHealthiness}></Options>
+        <Grid healthiness={healthiness} week={week}></Grid>
+      </div>
+    </div>
+  )
+}
+
+const Options = ({ setHealthiness }) => (
+  <div style={{ width: 420, margin: "2rem auto" }}>
     <Slider
       defaultValue={50}
       valueLabelFormat={value => `${(value / 50 - 1).toFixed(1)}`}
@@ -20,7 +55,8 @@ const Options = ({ setHealthiness, healthiness }) => (
     />
   </div>
 )
-const Grid = ({ healthiness }) => (
+
+const Grid = ({ healthiness, week }) => (
   <div style={{ display: "flex", marginTop: 16, justifyContent: "center" }}>
     {meals.map(meal => (
       <div key={meal} style={{ display: "flex", flexDirection: "column" }}>
@@ -53,19 +89,5 @@ const Grid = ({ healthiness }) => (
     ))}
   </div>
 )
-
-const App = () => {
-  const [healthiness, setHealthiness] = useState(0)
-  return (
-    <div style={{ maxWidth: 512, margin: "2rem auto", textAlign: "center" }}>
-      <h1 style={{ marginBottom: "2rem" }}>Week 1</h1>
-      <Options
-        healthiness={healthiness}
-        setHealthiness={setHealthiness}
-      ></Options>
-      <Grid healthiness={healthiness}></Grid>
-    </div>
-  )
-}
 
 export default App
