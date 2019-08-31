@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { Slider } from "@material-ui/core"
 import seedrandom from "seedrandom"
-import "./App.css"
 
 const meals = ["breakfast", "lunch", "dinner"]
 const days = ["mon", "tue", "wed", "thur", "fri"]
@@ -14,16 +13,20 @@ const App = () => {
   return (
     <div
       style={{
-        maxWidth: 608,
+        maxWidth: 432,
         margin: "2rem auto",
         textAlign: "center",
         display: "flex"
       }}
     >
       <div>
-        <h1 style={{ marginBottom: "3rem" }}>
+        <h1 style={{ marginBottom: "3rem", "user-select": "none" }}>
           <span
-            style={{ opacity: week === 1 ? 0.1 : 1, ...navStyle }}
+            style={{
+              opacity: week === 1 ? 0.1 : 1,
+              pointerEvents: week === 1 ? "none" : "all",
+              ...navStyle
+            }}
             onClick={() => setWeek(Math.max(0, week - 1))}
             direction={-1}
             children="⏪"
@@ -75,7 +78,9 @@ const Grid = ({ healthiness, week }) => (
                 height: 128,
                 width: 128,
                 backgroundImage: `url(./images/${foodItem}.png)`,
-                backgroundSize: "contain"
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center"
               }}
             ></div>
           )
