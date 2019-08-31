@@ -10,9 +10,11 @@ export default () => {
   const [week, setWeek] = useState(1)
   const [target, setTarget] = useState(0) // from -1 to 1
   return (
-    <div style={{ margin: "2rem auto", textAlign: "center" }}>
-      <Header week={week} setWeek={setWeek} />
-      <Options setTarget={setTarget} />
+    <div style={{ margin: "0rem auto", textAlign: "center" }}>
+      <div style={{ background: "#d1d1de", padding: "2rem 0 1px 0" }}>
+        <Header week={week} setWeek={setWeek} />
+        <Options setTarget={setTarget} />
+      </div>
       <Grid target={target} week={week} />
     </div>
   )
@@ -21,10 +23,10 @@ export default () => {
 const Header = ({ week, setWeek }) => {
   const navStyle = { fontSize: "1.8rem", margin: "0 8px", cursor: "pointer" }
   return (
-    <h1 style={{ marginBottom: "3rem", "user-select": "none" }}>
+    <h1 style={{ marginBottom: "3rem", marginTop: 0, "user-select": "none" }}>
       <span
         style={{
-          opacity: week === 1 ? 0.1 : 1,
+          opacity: week === 1 ? 0.2 : 1,
           pointerEvents: week === 1 ? "none" : "all",
           ...navStyle
         }}
@@ -47,9 +49,11 @@ const Options = ({ setTarget }) => (
   <div style={{ width: 420, margin: "2rem auto" }}>
     <Slider
       defaultValue={50}
-      valueLabelFormat={value => `${(value / 50 - 1).toFixed(1)}`}
+      valueLabelFormat={value =>
+        value < 33 ? "bad" : value < 66 ? "ok" : "good"
+      }
       onChange={(_, value) => setTarget(value / 50 - 1)}
-      valueLabelDisplay="off"
+      valueLabelDisplay="auto"
     />
   </div>
 )
@@ -58,7 +62,7 @@ const Grid = ({ target, week }) => (
   <div
     style={{
       display: "flex",
-      marginTop: 16,
+      marginTop: 48,
       justifyContent: "center",
       fontWeight: "bold"
     }}
