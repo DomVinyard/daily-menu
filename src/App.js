@@ -10,19 +10,10 @@ export default () => {
   const [week, setWeek] = useState(1)
   const [target, setTarget] = useState(0) // from -1 to 1
   return (
-    <div
-      style={{
-        maxWidth: 432,
-        margin: "2rem auto",
-        textAlign: "center",
-        display: "flex"
-      }}
-    >
-      <div>
-        <Header week={week} setWeek={setWeek} />
-        <Options setTarget={setTarget} />
-        <Grid target={target} week={week} />
-      </div>
+    <div style={{ margin: "2rem auto", textAlign: "center" }}>
+      <Header week={week} setWeek={setWeek} />
+      <Options setTarget={setTarget} />
+      <Grid target={target} week={week} />
     </div>
   )
 }
@@ -91,12 +82,11 @@ const Grid = ({ target, week }) => (
 )
 
 const GridItem = ({ week, day, meal, target }) => {
-  const threshold = foods
+  const foodsIndex = foods
     .map(food => seedrandom(`${week}.${day}.${meal}.${food}`)() * 2 - 1)
     .slice(1)
     .map(t => target >= t)
     .filter(Boolean).length
-  const foodItem = foods[threshold]
   return (
     <div
       key={meal + day}
@@ -104,7 +94,7 @@ const GridItem = ({ week, day, meal, target }) => {
         margin: 8,
         height: 128,
         width: 128,
-        backgroundImage: `url(./images/${foodItem}.png)`,
+        backgroundImage: `url(./images/${foods[foodsIndex]}.png)`,
         backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center"
