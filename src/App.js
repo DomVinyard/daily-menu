@@ -8,7 +8,7 @@ const foods = ["junk", "mid", "healthy"] // public/images/junk.png
 
 export default () => {
   const [week, setWeek] = useState(1)
-  const [target, setTarget] = useState(0) // from -1 to 1
+  const [target, setTarget] = useState(0.5) // from 0 to 1
   return (
     <div style={{ margin: "0rem auto", textAlign: "center" }}>
       <div style={{ background: "#d1d1de", padding: "2rem 0 1px 0" }}>
@@ -52,7 +52,7 @@ const Options = ({ setTarget }) => (
       valueLabelFormat={value =>
         value < 33 ? "bad" : value < 66 ? "ok" : "good"
       }
-      onChange={(_, value) => setTarget(value / 50 - 1)}
+      onChange={(_, value) => setTarget(value / 100)}
       valueLabelDisplay="auto"
     />
   </div>
@@ -86,9 +86,18 @@ const Grid = ({ target, week }) => (
 )
 
 const GridItem = ({ week, day, meal, target }) => {
+  const moderationBias = 1.4 // fewer extremes
   const foodsIndex = foods
-    .map(food => seedrandom(`${week}.${day}.${meal}.${food}`)() * 2 - 1)
+    .map((food, i) => seedrandom(`${week}.${day}.${meal}.${food}`)())
     .slice(1)
+    .sort()
+    .map((seed, i) =>
+      i === 0 ? seed / moderationBias : 1 - (1 - seed) / moderationBias
+    )
+    .map(seed => {
+      console.log({ week, day, meal, target, seed })
+      return seed
+    })
     .map(t => target >= t)
     .filter(Boolean).length
   return (
